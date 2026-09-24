@@ -5,6 +5,7 @@ export { env } from './config/env.js';
 
 // lib
 export { auth } from './lib/auth.js';
+export { inngest } from './lib/inngest.js';
 
 // loader
 export { loadModules } from './loader/modules.js';
