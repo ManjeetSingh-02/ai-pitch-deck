@@ -19,6 +19,7 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z.string().nonempty({ error: 'GOOGLE_CLIENT_ID is required' }),
   GOOGLE_CLIENT_SECRET: z.string().nonempty({ error: 'GOOGLE_CLIENT_SECRET is required' }),
   OPENAI_API_KEY: z.string().nonempty({ error: 'OPENAI_API_KEY is required' }),
+  IMAGEKIT_PRIVATE_KEY: z.string().nonempty({ error: 'IMAGEKIT_PRIVATE_KEY is required' }),
 });
 
 // function to validate environment variables
