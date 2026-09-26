@@ -1,6 +1,7 @@
 // internal-imports
 import {
   ErrorResponse,
+  inngest,
   prisma,
   SuccessResponse,
   type Authenticated,
@@ -100,6 +101,9 @@ export const controller = {
         prompt: request.validated.body.prompt,
       },
     });
+
+    // invoke inngest to generate the deck asynchronously
+    await inngest.send({ name: 'deck/generate', data: { id: deck.id } });
 
     // return response with success
     return response.status(201).json(
