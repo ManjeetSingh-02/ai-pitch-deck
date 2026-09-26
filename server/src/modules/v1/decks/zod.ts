@@ -11,6 +11,6 @@ export const deckIdSchema = z.object({
 // schema for createDeck
 export const createDeckSchema = z.object({
   body: z.object({
-    prompt: z.string().trim().nonempty(),
+    prompt: z.string().trim().min(30).max(300),
   }),
 });
