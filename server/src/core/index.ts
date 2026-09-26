@@ -5,7 +5,9 @@ export { env } from './config/env.js';
 
 // lib
 export { auth } from './lib/auth.js';
+export { imageKit } from './lib/image-kit.js';
 export { inngest } from './lib/inngest.js';
+export { openai } from './lib/openai.js';
 
 // loader
 export { loadModules } from './loader/modules.js';
