@@ -19,7 +19,7 @@ export { errorHandler } from './middleware/error.js';
 export { validateZodSchema } from './middleware/zod.js';
 
 // prisma
-export { prisma } from './prisma/client.js';
+export { prisma, type Deck, type Slide } from './prisma/client.js';
 
 // response
 export { ErrorResponse } from './response/error.js';
