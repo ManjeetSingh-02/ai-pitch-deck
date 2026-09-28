@@ -82,6 +82,7 @@ model Deck {
   id          String     @id @default(uuid())
   prompt      String     @db.Text
   status      DeckStatus @default(PENDING)
+  progress    Int        @default(0)
   title       String     @default("New Deck")
   userId      String
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -30,6 +30,7 @@ export const controller = {
         updatedAt: true,
         createdAt: true,
         status: true,
+        progress: true,
         _count: {
           select: {
             slides: true,
