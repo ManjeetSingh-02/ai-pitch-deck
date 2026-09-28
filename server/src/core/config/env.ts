@@ -15,11 +15,14 @@ const envSchema = z.object({
   DATABASE_URL: z.url({ error: 'DATABASE_URL must be a valid URL' }),
   NODE_ENV: z.enum(Object.values(APP_CONFIG.NODE_ENVS)),
   BETTER_AUTH_SECRET: z.string().min(32, { error: 'BETTER_AUTH_SECRET must be at least 32 chars' }),
-  BETTER_AUTH_URL: z.url({ message: 'BETTER_AUTH_URL must be a valid URL' }),
+  BETTER_AUTH_URL: z.url({ error: 'BETTER_AUTH_URL must be a valid URL' }),
   GOOGLE_CLIENT_ID: z.string().nonempty({ error: 'GOOGLE_CLIENT_ID is required' }),
   GOOGLE_CLIENT_SECRET: z.string().nonempty({ error: 'GOOGLE_CLIENT_SECRET is required' }),
   OPENAI_API_KEY: z.string().nonempty({ error: 'OPENAI_API_KEY is required' }),
   IMAGEKIT_PRIVATE_KEY: z.string().nonempty({ error: 'IMAGEKIT_PRIVATE_KEY is required' }),
+  USE_PLACEHOLDER_IMAGES: z.enum(['true', 'false']).transform(v => v === 'true'),
+  INNGEST_EVENT_KEY: z.string().nonempty({ error: 'INNGEST_EVENT_KEY is required' }),
+  INNGEST_SIGNING_KEY: z.string().nonempty({ error: 'INNGEST_SIGNING_KEY is required' }),
 });
 
 // function to validate environment variables
