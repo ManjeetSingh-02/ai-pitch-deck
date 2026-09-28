@@ -1,4 +1,5 @@
 // internal-imports
+import { generateDeckChannel } from '@/inngest/index.js';
 import {
   ErrorResponse,
   inngest,
@@ -11,6 +12,7 @@ import type { createDeckSchema, deckIdSchema } from './zod.js';
 
 // external-imports
 import type { Request, Response } from 'express';
+import { getClientSubscriptionToken } from 'inngest/react';
 
 // controller for module
 export const controller = {
@@ -86,6 +88,44 @@ export const controller = {
       new SuccessResponse({
         data: deck,
         message: 'Deck retrieved successfully',
+      })
+    );
+  },
+
+  // @controller GET /:id/realtime
+  listDeckRealtimeToken: async (
+    request: Request & Authenticated & Validated<typeof deckIdSchema>,
+    response: Response
+  ) => {
+    // find deck
+    const deck = await prisma.deck.findFirst({
+      where: {
+        id: request.validated.params.id,
+        userId: request.user.id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    // if deck not found, throw error
+    if (!deck)
+      throw new ErrorResponse({
+        code: 404,
+        message: 'Deck not found',
+      });
+
+    // generate a realtime token for the deck
+    const token = await getClientSubscriptionToken(inngest, {
+      channel: generateDeckChannel({ deckId: deck.id }),
+      topics: ['status'],
+    });
+
+    // return response with success
+    return response.status(200).json(
+      new SuccessResponse({
+        data: { token },
+        message: 'Realtime token generated successfully',
       })
     );
   },

@@ -20,6 +20,14 @@ router.get(
   controller.listDeck as RequestHandler
 );
 
+// @route GET /:id/realtime
+router.get(
+  '/:id/realtime',
+  authenticate,
+  validateZodSchema(deckIdSchema),
+  controller.listDeckRealtimeToken as RequestHandler
+);
+
 // @route POST /
 router.post(
   '/',
