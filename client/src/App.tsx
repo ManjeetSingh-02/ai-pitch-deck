@@ -28,20 +28,19 @@ export default function App() {
     if (!isPending) router.invalidate();
   }, [session, isPending]);
 
-  if (isPending)
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spinner className="size-6" />
-      </div>
-    );
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <RouterProvider
-          router={router}
-          context={{ session }}
-        />
+        {isPending ? (
+          <div className="flex min-h-screen items-center justify-center">
+            <Spinner className="size-6" />
+          </div>
+        ) : (
+          <RouterProvider
+            router={router}
+            context={{ session }}
+          />
+        )}
         <Toaster />
       </ThemeProvider>
     </QueryClientProvider>
