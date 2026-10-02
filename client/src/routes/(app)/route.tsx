@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/(app)')({
   beforeLoad: async ({ context }) => {
@@ -11,5 +11,5 @@ export const Route = createFileRoute('/(app)')({
       },
     };
   },
-  component: () => <div>Hi app</div>,
+  component: Outlet,
 });

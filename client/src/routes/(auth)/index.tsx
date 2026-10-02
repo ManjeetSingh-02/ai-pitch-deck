@@ -3,6 +3,7 @@ import { toast } from '@/components/ui/toast';
 import { authClient } from '@/lib/auth-client';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { WandSparkles } from 'lucide-react';
+import { FaGoogle } from 'react-icons/fa';
 
 export const Route = createFileRoute('/(auth)/')({
   beforeLoad: async ({ context }) => {
@@ -41,7 +42,8 @@ export const Route = createFileRoute('/(auth)/')({
           onClick={handleGoogleSignIn}
           size="lg"
         >
-          Continue with Google
+          <FaGoogle />
+          <span>Continue with Google</span>
         </Button>
       </section>
     );

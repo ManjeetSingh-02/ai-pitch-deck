@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as appRouteRouteImport } from './routes/(app)/route'
 import { Route as appDecksRouteRouteImport } from './routes/(app)/decks/route'
+import { Route as appSettingsRouteImport } from './routes/(app)/settings'
 import { Route as authIndexRouteImport } from './routes/(auth)/index'
 
 const appRouteRoute = appRouteRouteImport.update({
@@ -22,6 +23,11 @@ const appDecksRouteRoute = appDecksRouteRouteImport.update({
   path: '/decks',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appSettingsRoute = appSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => appRouteRoute,
+} as any)
 const authIndexRoute = authIndexRouteImport.update({
   id: '/(auth)/',
   path: '/',
@@ -30,24 +36,27 @@ const authIndexRoute = authIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/decks': typeof appDecksRouteRoute
+  '/settings': typeof appSettingsRoute
   '/': typeof authIndexRoute
 }
 export interface FileRoutesByTo {
   '/decks': typeof appDecksRouteRoute
+  '/settings': typeof appSettingsRoute
   '/': typeof authIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(app)': typeof appRouteRouteWithChildren
   '/(app)/decks': typeof appDecksRouteRoute
+  '/(app)/settings': typeof appSettingsRoute
   '/(auth)/': typeof authIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/decks' | '/'
+  fullPaths: '/decks' | '/settings' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/decks' | '/'
-  id: '__root__' | '/(app)' | '/(app)/decks' | '/(auth)/'
+  to: '/decks' | '/settings' | '/'
+  id: '__root__' | '/(app)' | '/(app)/decks' | '/(app)/settings' | '/(auth)/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -71,6 +80,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appDecksRouteRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/settings': {
+      id: '/(app)/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof appSettingsRouteImport
+      parentRoute: typeof appRouteRoute
+    }
     '/(auth)/': {
       id: '/(auth)/'
       path: '/'
@@ -83,10 +99,12 @@ declare module '@tanstack/react-router' {
 
 interface appRouteRouteChildren {
   appDecksRouteRoute: typeof appDecksRouteRoute
+  appSettingsRoute: typeof appSettingsRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
   appDecksRouteRoute: appDecksRouteRoute,
+  appSettingsRoute: appSettingsRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
