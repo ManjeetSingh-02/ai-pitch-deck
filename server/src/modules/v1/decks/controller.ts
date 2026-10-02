@@ -29,6 +29,7 @@ export const controller = {
       select: {
         id: true,
         title: true,
+        description: true,
         updatedAt: true,
         createdAt: true,
         status: true,
