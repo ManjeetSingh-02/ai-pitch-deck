@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Home } from 'lucide-react';
 
 export function NotFound() {
   return (
@@ -17,7 +17,10 @@ export function NotFound() {
         The page you are looking for does not exist or may have moved.
       </p>
       <Link to="/">
-        <Button size="lg">Back to Home</Button>
+        <Button size="lg">
+          <Home />
+          <span>Back to Home</span>
+        </Button>
       </Link>
     </section>
   );
