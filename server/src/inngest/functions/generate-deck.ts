@@ -68,6 +68,10 @@ export const generateDeck = inngest.createFunction(
       await step.realtime.publish('publish-deck-updated', channel.status, {
         status,
         progress,
+        data: {
+          title,
+          description,
+        },
       });
 
       // loop through the generated slides
