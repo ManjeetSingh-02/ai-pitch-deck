@@ -1,12 +1,6 @@
-import { toast } from '@/components/ui/toast';
-import { Button } from '@/components/ui/button';
-import { useDeleteDecks } from '@/hooks/use-deck';
-import { authClient } from '@/lib/auth-client';
-import { createFileRoute } from '@tanstack/react-router';
-import { Edit, LogOut, Trash, UserRound } from 'lucide-react';
-import { useState } from 'react';
+import { ThemeSelector } from '@/components/theme-selector';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -17,15 +11,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Field } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { ThemeSelector } from '@/components/theme-selector';
+import { Separator } from '@/components/ui/separator';
+import { toast } from '@/components/ui/toast';
+import { useDeleteDecks } from '@/hooks/use-deck';
+import { authClient } from '@/lib/auth-client';
+import { createFileRoute } from '@tanstack/react-router';
+import { UserRound } from 'lucide-react';
 
 export const Route = createFileRoute('/(app)/settings')({
   loader: async ({ context }) => ({ user: context.user }),
   component: function Settings() {
     const { user } = Route.useLoaderData();
-    const [name, setName] = useState(user.name);
     const deleteDecksMutation = useDeleteDecks();
 
     function deleteDecks() {
@@ -43,41 +39,6 @@ export const Route = createFileRoute('/(app)/settings')({
             timeout: 3000,
           }),
       });
-    }
-
-    async function logoutUser() {
-      try {
-        await authClient.signOut();
-        toast.add({
-          title: 'Logged out successfully',
-          type: 'success',
-          timeout: 3000,
-        });
-      } catch {
-        toast.add({
-          title: 'Failed to log out',
-          type: 'error',
-          timeout: 3000,
-        });
-      }
-    }
-
-    async function updateUserName() {
-      try {
-        await authClient.updateUser({ name });
-
-        toast.add({
-          title: 'Name updated',
-          type: 'success',
-          timeout: 3000,
-        });
-      } catch {
-        toast.add({
-          title: 'Failed to update name',
-          type: 'error',
-          timeout: 3000,
-        });
-      }
     }
 
     async function deleteAccount() {
@@ -128,44 +89,25 @@ export const Route = createFileRoute('/(app)/settings')({
               </div>
 
               <Dialog>
-                <DialogTrigger
-                  render={
-                    <Button
-                      className="flex items-center"
-                      variant="outline"
-                    >
-                      <Edit />
-                      Edit name
-                    </Button>
-                  }
-                />
+                <DialogTrigger render={<Button variant="destructive">Delete</Button>} />
 
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Update Name</DialogTitle>
-                    <DialogDescription>Enter a new name for your account</DialogDescription>
+                    <DialogTitle>Delete your account?</DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone and will permanently delete your account.
+                    </DialogDescription>
                   </DialogHeader>
-
-                  <Field>
-                    <Input
-                      id="name"
-                      name="name"
-                      maxLength={20}
-                      value={name}
-                      onChange={e => setName(e.target.value)}
-                    />
-                  </Field>
 
                   <DialogFooter>
                     <DialogClose render={<Button variant="outline">Cancel</Button>} />
-
                     <DialogClose
                       render={
                         <Button
-                          disabled={name.trim().length === 0 || name === user.name}
-                          onClick={updateUserName}
+                          variant="destructive"
+                          onClick={deleteAccount}
                         >
-                          Rename
+                          Delete
                         </Button>
                       }
                     />
@@ -173,55 +115,13 @@ export const Route = createFileRoute('/(app)/settings')({
                 </DialogContent>
               </Dialog>
             </div>
-
-            <Separator />
-
-            <div className="flex items-center justify-between p-5">
-              <div className="flex min-w-0 flex-col gap-0.5">
-                <p className="font-medium">Log out</p>
-                <p className="text-muted-foreground text-sm">
-                  Sign out of your account on this device
-                </p>
-              </div>
-
-              <Button
-                className="flex items-center"
-                variant="outline"
-                onClick={logoutUser}
-              >
-                <LogOut />
-                <span>Log out</span>
-              </Button>
-            </div>
-
-            <Separator />
-
-            <div className="flex items-center justify-between p-5">
-              <div className="flex min-w-0 flex-col gap-0.5">
-                <p className="font-medium">Delete account</p>
-                <p className="text-muted-foreground text-sm">
-                  Permanently delete your account and all associated data
-                </p>
-              </div>
-
-              <Button
-                className="flex items-center"
-                variant="destructive"
-                onClick={deleteAccount}
-              >
-                <Trash />
-                <span>Delete account</span>
-              </Button>
-            </div>
           </div>
         </section>
 
         <section className="flex flex-col gap-6">
           <div className="flex flex-col gap-1">
             <h2 className="font-semibold">Preferences</h2>
-            <p className="text-muted-foreground text-sm">
-              Customize your app experience and manage your decks
-            </p>
+            <p className="text-muted-foreground text-sm">Customize your app experience</p>
           </div>
 
           <div className="bg-card overflow-hidden rounded-xl border">
@@ -240,20 +140,36 @@ export const Route = createFileRoute('/(app)/settings')({
 
             <div className="flex items-center justify-between p-5">
               <div className="flex min-w-0 flex-col gap-0.5">
-                <p className="font-medium">Delete all decks</p>
-                <p className="text-muted-foreground text-sm">
-                  Permanently delete all your decks and it's associated data
-                </p>
+                <p className="font-medium">Decks</p>
+                <p className="text-muted-foreground text-sm">Delete all your decks and its data</p>
               </div>
 
-              <Button
-                className="flex items-center"
-                variant="destructive"
-                onClick={deleteDecks}
-              >
-                <Trash />
-                <span>Delete all decks</span>
-              </Button>
+              <Dialog>
+                <DialogTrigger render={<Button variant="destructive">Delete</Button>} />
+
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Delete your decks?</DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone and will permanently delete all your decks.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <DialogFooter>
+                    <DialogClose render={<Button variant="outline">Cancel</Button>} />
+                    <DialogClose
+                      render={
+                        <Button
+                          variant="destructive"
+                          onClick={deleteDecks}
+                        >
+                          Delete
+                        </Button>
+                      }
+                    />
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </section>
