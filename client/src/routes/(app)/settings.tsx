@@ -23,10 +23,12 @@ import {
 import { toast } from '@/components/ui/toast';
 import { useDeleteDecks } from '@/hooks/use-deck';
 import { authClient } from '@/lib/auth-client';
+import { pageTitle } from '@/utils/title';
 import { createFileRoute } from '@tanstack/react-router';
 import { UserRound } from 'lucide-react';
 
 export const Route = createFileRoute('/(app)/settings')({
+  head: () => ({ meta: [{ title: pageTitle('Settings') }] }),
   loader: async ({ context }) => ({ user: context.user }),
   component: function Settings() {
     const { user } = Route.useLoaderData();
