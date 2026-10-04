@@ -2,12 +2,17 @@ import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { toast } from '@/components/ui/toast';
 import { authClient } from '@/lib/auth-client';
-import { Link } from '@tanstack/react-router';
-import { LogOut, Settings, WandSparkles } from 'lucide-react';
-import { FaGithub } from 'react-icons/fa';
+import { Link, useRouterState } from '@tanstack/react-router';
+import { cn } from 'cn';
+import { Home, LogOut, Settings, WandSparkles } from 'lucide-react';
 
 export function Navbar() {
   const { data } = authClient.useSession();
+  const pathname = useRouterState({ select: state => state.location.pathname });
+  const items = [
+    { label: 'Decks', to: '/decks', icon: Home },
+    { label: 'Settings', to: '/settings', icon: Settings },
+  ];
 
   async function logoutUser() {
     try {
@@ -28,67 +33,53 @@ export function Navbar() {
   }
 
   return (
-    <nav className="mx-auto flex w-full max-w-6xl items-center justify-between p-3">
-      <Link
-        to="/"
-        className="flex items-center gap-2 text-lg font-semibold tracking-tight"
-      >
+    <nav
+      className={cn(
+        'mx-auto flex w-full max-w-6xl items-center p-3',
+        data?.user ? 'bg-background justify-between' : 'justify-center'
+      )}
+    >
+      <div className="hidden items-center gap-2 text-lg font-semibold tracking-tight sm:flex">
         <WandSparkles
           data-icon="inline-start"
           aria-hidden="true"
         />
-        AI Pitch Deck
-      </Link>
+        <span>AI Pitch Deck</span>
+      </div>
 
-      <div className="flex items-center gap-1">
-        {data?.user && (
-          <ButtonGroup>
+      {data?.user && (
+        <ButtonGroup className="bg-muted rounded-lg">
+          {items.map(item => (
             <Button
+              key={item.label}
+              variant={pathname === item.to ? 'default' : 'ghost'}
               nativeButton={false}
-              variant="secondary"
               render={
-                <Link to="/settings">
-                  <Settings
+                <Link to={item.to}>
+                  <item.icon
                     data-icon="inline-start"
                     aria-hidden="true"
                   />
-                  <span className="hidden sm:inline-block">Settings</span>
+                  <span>{item.label}</span>
                 </Link>
               }
             />
+          ))}
+        </ButtonGroup>
+      )}
 
-            <Button
-              className="flex items-center"
-              variant="destructive"
-              onClick={logoutUser}
-            >
-              <LogOut
-                data-icon="inline-start"
-                aria-hidden="true"
-              />
-              <span className="hidden sm:inline-block">LogOut</span>
-            </Button>
-          </ButtonGroup>
-        )}
-
+      {data?.user && (
         <Button
-          nativeButton={false}
-          variant="ghost"
-          render={
-            <a
-              href="https://github.com/ManjeetSingh-02/ai-pitch-deck"
-              target="_blank"
-              rel="noreferrer"
-            />
-          }
+          variant="destructive"
+          onClick={logoutUser}
         >
-          <FaGithub
+          <LogOut
             data-icon="inline-start"
             aria-hidden="true"
           />
-          <span className="hidden sm:inline-block">GitHub</span>
+          <span>LogOut</span>
         </Button>
-      </div>
+      )}
     </nav>
   );
 }

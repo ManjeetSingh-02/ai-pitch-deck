@@ -1,3 +1,4 @@
+import { Footer } from '@/components/footer';
 import { Navbar } from '@/components/navbar';
 import { NotFound } from '@/components/not-found';
 import { authClient } from '@/lib/auth-client';
@@ -14,9 +15,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         <Navbar />
       </header>
 
-      <main className="flex min-h-0 flex-1 items-center justify-center overflow-y-auto">
+      <main className="flex min-h-0 flex-1 items-center justify-center overflow-y-auto py-8">
         <Outlet />
       </main>
+
+      <Footer />
     </div>
   ),
   notFoundComponent: NotFound,
