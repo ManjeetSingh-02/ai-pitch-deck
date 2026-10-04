@@ -1,6 +1,7 @@
 import { Footer } from '@/components/footer';
 import { Navbar } from '@/components/navbar';
 import { NotFound } from '@/components/not-found';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { authClient } from '@/lib/auth-client';
 import { pageTitle } from '@/utils/title';
 import { createRootRouteWithContext, HeadContent, Outlet } from '@tanstack/react-router';
@@ -15,14 +16,14 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     <>
       <HeadContent />
 
-      <div className="bg-background flex min-h-dvh flex-col">
-        <header className="sticky top-0 shrink-0">
-          <Navbar />
-        </header>
+      <div className="bg-background flex h-dvh flex-col overflow-hidden">
+        <Navbar />
 
-        <main className="flex min-h-0 flex-1 items-center justify-center overflow-y-auto py-8">
-          <Outlet />
-        </main>
+        <ScrollArea className="min-h-0 flex-1">
+          <div className="mx-auto flex w-full max-w-5xl justify-center py-4">
+            <Outlet />
+          </div>
+        </ScrollArea>
 
         <Footer />
       </div>
