@@ -82,7 +82,7 @@ export const generateDeck = inngest.createFunction(
         // generate and upload the slide image
         const { url } = await step.run(`generate-upload-slide-${order}-image`, async () => {
           const buffer = await generateImage(slide.imagePrompt);
-          return uploadImage(buffer, deck.id, `slide-${order}.png`);
+          return uploadImage(buffer, deck.userId, deck.id, `slide-${order}.png`);
         });
 
         // create the slide

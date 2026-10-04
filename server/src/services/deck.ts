@@ -5,7 +5,7 @@ import { prisma, type Deck } from '@/core/index.js';
 export async function fetchDeck(id: Deck['id']) {
   const deck = await prisma.deck.findUnique({
     where: { id },
-    select: { id: true, prompt: true },
+    select: { id: true, prompt: true, userId: true },
   });
   if (!deck) throw new Error('Deck not found');
 
