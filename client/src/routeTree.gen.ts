@@ -10,18 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as appRouteRouteImport } from './routes/(app)/route'
-import { Route as appDecksRouteRouteImport } from './routes/(app)/decks/route'
 import { Route as appSettingsRouteImport } from './routes/(app)/settings'
 import { Route as authIndexRouteImport } from './routes/(auth)/index'
+import { Route as appDecksIndexRouteImport } from './routes/(app)/decks/index'
+import { Route as appDecksIdRouteImport } from './routes/(app)/decks/$id'
 
 const appRouteRoute = appRouteRouteImport.update({
   id: '/(app)',
   getParentRoute: () => rootRouteImport,
-} as any)
-const appDecksRouteRoute = appDecksRouteRouteImport.update({
-  id: '/decks',
-  path: '/decks',
-  getParentRoute: () => appRouteRoute,
 } as any)
 const appSettingsRoute = appSettingsRouteImport.update({
   id: '/settings',
@@ -33,30 +29,49 @@ const authIndexRoute = authIndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const appDecksIndexRoute = appDecksIndexRouteImport.update({
+  id: '/decks/',
+  path: '/decks/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appDecksIdRoute = appDecksIdRouteImport.update({
+  id: '/decks/$id',
+  path: '/decks/$id',
+  getParentRoute: () => appRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/decks': typeof appDecksRouteRoute
   '/settings': typeof appSettingsRoute
   '/': typeof authIndexRoute
+  '/decks/$id': typeof appDecksIdRoute
+  '/decks/': typeof appDecksIndexRoute
 }
 export interface FileRoutesByTo {
-  '/decks': typeof appDecksRouteRoute
   '/settings': typeof appSettingsRoute
   '/': typeof authIndexRoute
+  '/decks/$id': typeof appDecksIdRoute
+  '/decks': typeof appDecksIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(app)': typeof appRouteRouteWithChildren
-  '/(app)/decks': typeof appDecksRouteRoute
   '/(app)/settings': typeof appSettingsRoute
   '/(auth)/': typeof authIndexRoute
+  '/(app)/decks/$id': typeof appDecksIdRoute
+  '/(app)/decks/': typeof appDecksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/decks' | '/settings' | '/'
+  fullPaths: '/settings' | '/' | '/decks/$id' | '/decks/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/decks' | '/settings' | '/'
-  id: '__root__' | '/(app)' | '/(app)/decks' | '/(app)/settings' | '/(auth)/'
+  to: '/settings' | '/' | '/decks/$id' | '/decks'
+  id:
+    | '__root__'
+    | '/(app)'
+    | '/(app)/settings'
+    | '/(auth)/'
+    | '/(app)/decks/$id'
+    | '/(app)/decks/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -73,13 +88,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(app)/decks': {
-      id: '/(app)/decks'
-      path: '/decks'
-      fullPath: '/decks'
-      preLoaderRoute: typeof appDecksRouteRouteImport
-      parentRoute: typeof appRouteRoute
-    }
     '/(app)/settings': {
       id: '/(app)/settings'
       path: '/settings'
@@ -94,17 +102,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(app)/decks/': {
+      id: '/(app)/decks/'
+      path: '/decks'
+      fullPath: '/decks/'
+      preLoaderRoute: typeof appDecksIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/decks/$id': {
+      id: '/(app)/decks/$id'
+      path: '/decks/$id'
+      fullPath: '/decks/$id'
+      preLoaderRoute: typeof appDecksIdRouteImport
+      parentRoute: typeof appRouteRoute
+    }
   }
 }
 
 interface appRouteRouteChildren {
-  appDecksRouteRoute: typeof appDecksRouteRoute
   appSettingsRoute: typeof appSettingsRoute
+  appDecksIdRoute: typeof appDecksIdRoute
+  appDecksIndexRoute: typeof appDecksIndexRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
-  appDecksRouteRoute: appDecksRouteRoute,
   appSettingsRoute: appSettingsRoute,
+  appDecksIdRoute: appDecksIdRoute,
+  appDecksIndexRoute: appDecksIndexRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
