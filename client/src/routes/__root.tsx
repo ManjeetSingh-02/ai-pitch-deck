@@ -20,7 +20,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         <Navbar />
 
         <ScrollArea className="min-h-0 flex-1">
-          <div className="mx-auto flex w-full max-w-5xl justify-center py-4">
+          <div className="mx-auto h-full w-full max-w-6xl">
             <Outlet />
           </div>
         </ScrollArea>

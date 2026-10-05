@@ -70,7 +70,7 @@ export const Route = createFileRoute('/(app)/settings')({
     }
 
     return (
-      <section className="flex w-full max-w-2xl flex-col px-4">
+      <section className="mx-auto flex min-h-full w-full max-w-2xl flex-col justify-center px-4">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-semibold">Settings</h1>
           <p className="text-muted-foreground">Manage your account, appearance, and decks</p>

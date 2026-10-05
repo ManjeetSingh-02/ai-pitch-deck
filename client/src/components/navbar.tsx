@@ -35,7 +35,7 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        'mx-auto flex w-full max-w-6xl items-center p-3',
+        'mx-auto flex w-full max-w-6xl shrink-0 items-center p-3',
         data?.user ? 'bg-background justify-between' : 'justify-center'
       )}
     >

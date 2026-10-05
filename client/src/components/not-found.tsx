@@ -4,7 +4,7 @@ import { AlertTriangle, Home } from 'lucide-react';
 
 export function NotFound() {
   return (
-    <section className="flex flex-col items-center gap-4 text-center">
+    <section className="flex min-h-full flex-col items-center justify-center gap-4 px-4 text-center">
       <AlertTriangle
         data-icon="inline-start"
         aria-hidden="true"
