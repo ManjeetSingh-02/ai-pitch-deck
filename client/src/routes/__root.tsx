@@ -1,4 +1,3 @@
-import { Footer } from '@/components/footer';
 import { Navbar } from '@/components/navbar';
 import { NotFound } from '@/components/not-found';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -20,12 +19,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         <Navbar />
 
         <ScrollArea className="min-h-0 flex-1">
-          <div className="mx-auto h-full w-full max-w-6xl">
-            <Outlet />
-          </div>
+          <Outlet />
         </ScrollArea>
-
-        <Footer />
       </div>
     </>
   ),

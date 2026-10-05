@@ -3,8 +3,8 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { toast } from '@/components/ui/toast';
 import { authClient } from '@/lib/auth-client';
 import { Link, useRouterState } from '@tanstack/react-router';
-import { cn } from 'cn';
 import { Home, LogOut, Settings, WandSparkles } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 
 export function Navbar() {
   const { data } = authClient.useSession();
@@ -33,15 +33,10 @@ export function Navbar() {
   }
 
   return (
-    <nav
-      className={cn(
-        'mx-auto flex w-full max-w-6xl shrink-0 items-center p-3',
-        data?.user ? 'bg-background justify-between' : 'justify-center'
-      )}
-    >
+    <nav className="bg-background mx-auto flex w-full max-w-6xl shrink-0 items-center justify-between p-3">
       <div className="hidden items-center gap-2 text-lg font-semibold tracking-tight sm:flex">
         <WandSparkles
-          data-icon="inline-start"
+          data-icon="wand-sparkles"
           aria-hidden="true"
         />
         <span>AI Pitch Deck</span>
@@ -57,7 +52,7 @@ export function Navbar() {
               render={
                 <Link to={item.to}>
                   <item.icon
-                    data-icon="inline-start"
+                    data-icon={item.label.toLowerCase()}
                     aria-hidden="true"
                   />
                   <span>{item.label}</span>
@@ -68,18 +63,38 @@ export function Navbar() {
         </ButtonGroup>
       )}
 
-      {data?.user && (
+      <div className="flex items-center gap-1">
+        {data?.user && (
+          <Button
+            variant="destructive"
+            onClick={logoutUser}
+          >
+            <LogOut
+              data-icon="logout"
+              aria-hidden="true"
+            />
+            <span>LogOut</span>
+          </Button>
+        )}
+
         <Button
-          variant="destructive"
-          onClick={logoutUser}
+          nativeButton={false}
+          variant="ghost"
+          render={
+            <a
+              href="https://github.com/ManjeetSingh-02/ai-pitch-deck"
+              target="_blank"
+              rel="noreferrer"
+            />
+          }
         >
-          <LogOut
-            data-icon="inline-start"
+          <FaGithub
+            data-icon="github"
             aria-hidden="true"
           />
-          <span>LogOut</span>
+          <span className="hidden sm:flex">GitHub</span>
         </Button>
-      )}
+      </div>
     </nav>
   );
 }

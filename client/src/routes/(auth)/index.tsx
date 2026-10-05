@@ -28,7 +28,7 @@ export const Route = createFileRoute('/(auth)/')({
     return (
       <section className="flex min-h-full flex-col items-center justify-center gap-4 px-4 text-center">
         <WandSparkles
-          data-icon="inline-start"
+          data-icon="wand-sparkles"
           aria-hidden="true"
         />
         <p className="text-muted-foreground text-sm font-semibold tracking-[0.2em] uppercase">
