@@ -3,14 +3,14 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { toast } from '@/components/ui/toast';
 import { authClient } from '@/lib/auth-client';
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Home, LogOut, Settings, WandSparkles } from 'lucide-react';
+import { LogOut, Presentation, Settings, WandSparkles } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 
 export function Navbar() {
   const { data } = authClient.useSession();
   const pathname = useRouterState({ select: state => state.location.pathname });
   const items = [
-    { label: 'Decks', to: '/decks', icon: Home },
+    { label: 'Decks', to: '/decks', icon: Presentation },
     { label: 'Settings', to: '/settings', icon: Settings },
   ];
 
