@@ -29,18 +29,12 @@ export function DeckPreview({ deck }: { deck: DeckType }) {
 
   return (
     <Card
-      className={cn(
-        'bg-background',
-        deck.status === 'READY' || deck.status === 'ERROR'
-          ? 'hover:bg-card cursor-pointer transition-colors'
-          : 'cursor-not-allowed'
-      )}
+      className="bg-background hover:bg-card cursor-pointer transition-colors"
       onClick={() => {
-        if (deck.status === 'READY' || deck.status === 'ERROR')
-          navigate({
-            to: '/decks/$id',
-            params: { id: deck.id },
-          });
+        navigate({
+          to: '/decks/$id',
+          params: { id: deck.id },
+        });
       }}
     >
       <CardHeader>
@@ -65,7 +59,7 @@ export function DeckPreview({ deck }: { deck: DeckType }) {
       </CardHeader>
 
       <CardContent>
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <div className="text-muted-foreground flex items-center justify-between text-xs">
             <span>{status}</span>
             <span>{progress}%</span>
