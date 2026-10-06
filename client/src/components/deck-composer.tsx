@@ -8,13 +8,11 @@ import {
 } from '@/components/ui/input-group';
 import { toast } from '@/components/ui/toast';
 import { useCreateDeck } from '@/hooks/use-deck';
-import { useNavigate } from '@tanstack/react-router';
 import { Send } from 'lucide-react';
 import { useState } from 'react';
 
 export function DeckComposer() {
   const [prompt, setPrompt] = useState('');
-  const navigate = useNavigate();
   const useCreateDeckMutation = useCreateDeck();
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -43,18 +41,12 @@ export function DeckComposer() {
             type: 'error',
             timeout: 3000,
           }),
-        onSuccess: ({ data }) => {
+        onSuccess: () =>
           toast.add({
             title: 'Deck enqueued for generation',
             type: 'info',
             timeout: 3000,
-          });
-
-          navigate({
-            to: '/decks/$id',
-            params: { id: data.id },
-          });
-        },
+          }),
         onSettled: () => setPrompt(''),
       }
     );

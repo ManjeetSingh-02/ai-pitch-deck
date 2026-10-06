@@ -29,13 +29,19 @@ export function DeckPreview({ deck }: { deck: DeckType }) {
 
   return (
     <Card
-      className="bg-background hover:bg-card cursor-pointer transition-colors"
-      onClick={() =>
-        navigate({
-          to: '/decks/$id',
-          params: { id: deck.id },
-        })
-      }
+      className={cn(
+        'bg-background',
+        deck.status === 'READY' || deck.status === 'ERROR'
+          ? 'hover:bg-card cursor-pointer transition-colors'
+          : 'cursor-not-allowed'
+      )}
+      onClick={() => {
+        if (deck.status === 'READY' || deck.status === 'ERROR')
+          navigate({
+            to: '/decks/$id',
+            params: { id: deck.id },
+          });
+      }}
     >
       <CardHeader>
         <div className="min-w-0">
