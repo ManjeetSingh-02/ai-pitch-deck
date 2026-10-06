@@ -1,3 +1,5 @@
+import { DeckProgress } from '@/components/deck-progress';
+import { DeckStatus } from '@/components/deck-status';
 import {
   Card,
   CardAction,
@@ -6,12 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { useDeckRealtime } from '@/hooks/use-deck';
 import type { DeckRealtimeData } from '@/types/decks';
 import { useNavigate } from '@tanstack/react-router';
-import { cn } from 'cn';
-import { AlertCircle, CheckCircle, LoaderCircle } from 'lucide-react';
 
 type DeckType = Pick<DeckRealtimeData, 'status' | 'progress'> & {
   id: string;
@@ -45,28 +44,16 @@ export function DeckPreview({ deck }: { deck: DeckType }) {
 
         <div className="flex items-center gap-2">
           <CardAction>
-            {status === 'ERROR' ? (
-              <AlertCircle className="text-destructive" />
-            ) : status === 'READY' ? (
-              <CheckCircle className="text-green-500" />
-            ) : (
-              <LoaderCircle
-                className={cn('animate-spin', status === 'GENERATING' ? 'text-yellow-500' : '')}
-              />
-            )}
+            <DeckStatus status={status} />
           </CardAction>
         </div>
       </CardHeader>
 
       <CardContent>
-        <div className="flex flex-col gap-2">
-          <div className="text-muted-foreground flex items-center justify-between text-xs">
-            <span>{status}</span>
-            <span>{progress}%</span>
-          </div>
-
-          <Progress value={progress} />
-        </div>
+        <DeckProgress
+          progress={progress}
+          status={status}
+        />
       </CardContent>
     </Card>
   );
