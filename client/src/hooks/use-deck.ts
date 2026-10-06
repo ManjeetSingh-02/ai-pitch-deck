@@ -1,6 +1,6 @@
 import { decks } from '@/api/decks';
 import { deckKeys, queryClient } from '@/lib/query';
-import type { CreateDeckData, DeckRealtimeData, DecksResponse } from '@/types/decks';
+import type { CreateDeckData, DeckRealtimeData, DeckResponse, DecksResponse } from '@/types/decks';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRealtime } from 'inngest/react';
 import { useEffect } from 'react';
@@ -68,6 +68,23 @@ export const useDeckRealtime = (id: string) => {
               : d
           ),
         }
+    );
+
+    queryClient.setQueryData<DeckResponse>(deckKeys.detail(id), old =>
+      old
+        ? {
+            ...old,
+            data: {
+              ...old.data,
+              progress: realtimeData.progress,
+              status: realtimeData.status,
+              ...(realtimeData.data && {
+                title: realtimeData.data.title,
+                description: realtimeData.data.description,
+              }),
+            },
+          }
+        : undefined
     );
 
     queryClient.invalidateQueries({ queryKey: deckKeys.detail(id) });
