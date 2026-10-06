@@ -8,11 +8,12 @@ import {
 } from '@/components/ui/input-group';
 import { toast } from '@/components/ui/toast';
 import { useCreateDeck } from '@/hooks/use-deck';
-import { Send } from 'lucide-react';
+import { LoaderCircle, Send } from 'lucide-react';
 import { useState } from 'react';
 
 export function DeckComposer() {
   const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
   const useCreateDeckMutation = useCreateDeck();
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -31,6 +32,7 @@ export function DeckComposer() {
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
+    setLoading(true);
 
     return useCreateDeckMutation.mutate(
       { prompt: prompt.trim() },
@@ -47,7 +49,10 @@ export function DeckComposer() {
             type: 'info',
             timeout: 3000,
           }),
-        onSettled: () => setPrompt(''),
+        onSettled: () => {
+          setLoading(false);
+          setPrompt('');
+        },
       }
     );
   }
@@ -77,10 +82,18 @@ export function DeckComposer() {
               size={prompt.trim() ? 'icon-sm' : 'icon-xs'}
               disabled={!prompt.trim()}
             >
-              <Send
-                data-icon="send"
-                aria-hidden="true"
-              />
+              {loading ? (
+                <LoaderCircle
+                  className="animate-spin"
+                  data-icon="loader-circle"
+                  aria-hidden="true"
+                />
+              ) : (
+                <Send
+                  data-icon="send"
+                  aria-hidden="true"
+                />
+              )}
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
