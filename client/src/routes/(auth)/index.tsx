@@ -2,16 +2,21 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/toast';
 import { authClient } from '@/lib/auth-client';
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { WandSparkles } from 'lucide-react';
+import { LoaderCircle, WandSparkles } from 'lucide-react';
+import { useState } from 'react';
 import { FaGoogle } from 'react-icons/fa';
 
 export const Route = createFileRoute('/(auth)/')({
   beforeLoad: async ({ context }) => {
     if (context.session) throw redirect({ to: '/decks' });
   },
-  component: () => {
+  component: function Login() {
+    const [isSigningIn, setIsSigningIn] = useState(false);
+
     async function handleGoogleSignIn() {
       try {
+        setIsSigningIn(true);
+
         await authClient.signIn.social({
           provider: 'google',
           callbackURL: window.location.origin,
@@ -22,6 +27,8 @@ export const Route = createFileRoute('/(auth)/')({
           type: 'error',
           timeout: 3000,
         });
+      } finally {
+        setIsSigningIn(false);
       }
     }
 
@@ -41,8 +48,9 @@ export const Route = createFileRoute('/(auth)/')({
         <Button
           onClick={handleGoogleSignIn}
           size="lg"
+          disabled={isSigningIn}
         >
-          <FaGoogle />
+          {isSigningIn ? <LoaderCircle className="animate-spin" /> : <FaGoogle />}
           <span>Continue with Google</span>
         </Button>
       </section>

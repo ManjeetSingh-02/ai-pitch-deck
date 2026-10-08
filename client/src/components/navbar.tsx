@@ -3,12 +3,14 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { toast } from '@/components/ui/toast';
 import { authClient } from '@/lib/auth-client';
 import { Link, useRouterState } from '@tanstack/react-router';
-import { LogOut, Presentation, Settings, WandSparkles } from 'lucide-react';
+import { LoaderCircle, LogOut, Presentation, Settings, WandSparkles } from 'lucide-react';
+import { useState } from 'react';
 import { FaGithub } from 'react-icons/fa';
 
 export function Navbar() {
   const { data } = authClient.useSession();
   const pathname = useRouterState({ select: state => state.location.pathname });
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const items = [
     { label: 'Decks', to: '/decks', icon: Presentation },
     { label: 'Settings', to: '/settings', icon: Settings },
@@ -16,6 +18,7 @@ export function Navbar() {
 
   async function logoutUser() {
     try {
+      setIsLoggingOut(true);
       await authClient.signOut();
 
       toast.add({
@@ -29,6 +32,8 @@ export function Navbar() {
         type: 'error',
         timeout: 3000,
       });
+    } finally {
+      setIsLoggingOut(false);
     }
   }
 
@@ -68,11 +73,20 @@ export function Navbar() {
           <Button
             variant="destructive"
             onClick={logoutUser}
+            disabled={isLoggingOut}
           >
-            <LogOut
-              data-icon="logout"
-              aria-hidden="true"
-            />
+            {isLoggingOut ? (
+              <LoaderCircle
+                data-icon="logout"
+                aria-hidden="true"
+                className="animate-spin"
+              />
+            ) : (
+              <LogOut
+                data-icon="logout"
+                aria-hidden="true"
+              />
+            )}
             <span>LogOut</span>
           </Button>
         )}

@@ -25,7 +25,8 @@ import { useDeleteDecks } from '@/hooks/use-deck';
 import { authClient } from '@/lib/auth-client';
 import { pageTitle } from '@/utils/title';
 import { createFileRoute } from '@tanstack/react-router';
-import { UserRound } from 'lucide-react';
+import { LoaderCircle, UserRound } from 'lucide-react';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/(app)/settings')({
   head: () => ({ meta: [{ title: pageTitle('Settings') }] }),
@@ -33,8 +34,12 @@ export const Route = createFileRoute('/(app)/settings')({
   component: function Settings() {
     const { user } = Route.useLoaderData();
     const deleteDecksMutation = useDeleteDecks();
+    const [isDeletingDecks, setIsDeletingDecks] = useState(false);
+    const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
     function deleteDecks() {
+      setIsDeletingDecks(true);
+
       return deleteDecksMutation.mutate(undefined, {
         onSuccess: () =>
           toast.add({
@@ -48,11 +53,13 @@ export const Route = createFileRoute('/(app)/settings')({
             type: 'error',
             timeout: 3000,
           }),
+        onSettled: () => setIsDeletingDecks(false),
       });
     }
 
     async function deleteAccount() {
       try {
+        setIsDeletingAccount(true);
         await authClient.deleteUser();
 
         toast.add({
@@ -66,6 +73,8 @@ export const Route = createFileRoute('/(app)/settings')({
           type: 'error',
           timeout: 3000,
         });
+      } finally {
+        setIsDeletingAccount(false);
       }
     }
 
@@ -95,7 +104,16 @@ export const Route = createFileRoute('/(app)/settings')({
               </ItemContent>
               <ItemActions>
                 <Dialog>
-                  <DialogTrigger render={<Button variant="destructive">Delete</Button>} />
+                  <DialogTrigger
+                    render={
+                      <Button
+                        variant="destructive"
+                        disabled={isDeletingAccount}
+                      >
+                        {isDeletingAccount ? <LoaderCircle className="animate-spin" /> : 'Delete'}
+                      </Button>
+                    }
+                  />
 
                   <DialogContent>
                     <DialogHeader>
@@ -112,6 +130,7 @@ export const Route = createFileRoute('/(app)/settings')({
                           <Button
                             variant="destructive"
                             onClick={deleteAccount}
+                            disabled={isDeletingAccount}
                           >
                             Delete
                           </Button>
@@ -152,7 +171,16 @@ export const Route = createFileRoute('/(app)/settings')({
               </ItemContent>
               <ItemActions>
                 <Dialog>
-                  <DialogTrigger render={<Button variant="destructive">Delete</Button>} />
+                  <DialogTrigger
+                    render={
+                      <Button
+                        variant="destructive"
+                        disabled={isDeletingDecks}
+                      >
+                        {isDeletingDecks ? <LoaderCircle className="animate-spin" /> : 'Delete'}
+                      </Button>
+                    }
+                  />
 
                   <DialogContent>
                     <DialogHeader>
@@ -169,6 +197,7 @@ export const Route = createFileRoute('/(app)/settings')({
                           <Button
                             variant="destructive"
                             onClick={deleteDecks}
+                            disabled={isDeletingDecks}
                           >
                             Delete
                           </Button>
