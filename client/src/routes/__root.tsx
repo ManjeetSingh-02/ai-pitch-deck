@@ -24,5 +24,5 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       </div>
     </>
   ),
-  notFoundComponent: NotFound,
+  notFoundComponent: () => <NotFound type="Page" />,
 });
